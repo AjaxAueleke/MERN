@@ -16,10 +16,11 @@ mongoose
   });
 
 
-app.use(cors);
+app.use(cors());
 app.use(express.json());
 app.use("/", express.static(path.join(__dirname, "web/build")));
 app.post("/api/v1/login", (req, res, next) => {
+  console.log(req);
   if (!req.body.email || !req.body.password) {
     res.status(400).send({
       error: "Fields missing",
@@ -90,7 +91,7 @@ app.post("/api/v1/signup", (req, res, next) => {
     }
   });
 });
-app.get("/**", (req, res) => res.redirect("/"));
+// app.get("/**", (req, res) => res.redirect("/"));
 app.listen(PORT, () => {
   console.log("Listening on port " + PORT);
 });
