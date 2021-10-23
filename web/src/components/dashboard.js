@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as yup from "yup";
 import Button from "@material-ui/core/Button";
@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import User from './user'
 import {
   BrowserRouter as Router,
   Switch,
@@ -29,6 +29,7 @@ const validationSchema = yup.object({
     .min(8, "Password should be of minimum 8 characters length")
     .required("Password is required"),
 });
+let Dashboard;
 export default Dashboard = () => {
   const history = useHistory();
   useEffect(()=> {
@@ -36,7 +37,7 @@ export default Dashboard = () => {
       history.push("/dashboard");
     }
   },[]);
-
+  const [todo, setTodo] = useState("");
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
@@ -62,17 +63,21 @@ export default Dashboard = () => {
           </Toolbar>
         </AppBar>
       </Box>
+      <User />
+
       <Box sx={{ margin: "50px auto" }}>
           <TextField
             fullWidth
-            id="email"
-            name="email"
-            label="Email"
+            id="todo"
+            name="todo"
+            label="Todo"
+            value = {todo}
             onChange = {(e) => {
-                setTodo(e.targe.value);
+                
+                setTodo(e.target.value);
             }}
           />
-          
+
           <Button color="primary" variant="contained" fullWidth onClick = {() => {
 
           }} >
