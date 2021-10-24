@@ -17,10 +17,17 @@ import {
   Link,
   Redirect,
   useHistory,
-  useLocation
+  useLocation,
 } from "react-router-dom";
 
 const validationSchema = yup.object({
+  firstname: yup
+    .string("Enter you first name")
+    .required("FirstName is required"),
+  lastname: yup
+    .string("Enter your last name")
+    .required("Last Name is required"),
+
   email: yup
     .string("Enter your email")
     .email("Enter a valid email")
@@ -29,19 +36,23 @@ const validationSchema = yup.object({
     .string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
     .required("Password is required"),
+  about: yup.string().required,
 });
 let Login;
 export default Login = () => {
   const history = useHistory();
-  useEffect(()=> {
+  useEffect(() => {
     if (localStorage.getItem("user")) {
       history.push("/dashboard");
     }
-  })
+  });
   const formik = useFormik({
     initialValues: {
-      email: "foobar@example.com",
-      password: "foobar",
+      firstname : "",
+      lastname : "",
+      about : "",
+      email: "",
+      password: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -54,7 +65,7 @@ export default Login = () => {
         .then((res) => {
           if (res.status === 200) {
             localStorage.clear();
-            localStorage.setItem("user", JSON.stringify(res.data))
+            localStorage.setItem("user", JSON.stringify(res.data));
             history.push("/dashboard");
           }
           console.log(res);
@@ -62,7 +73,6 @@ export default Login = () => {
         .catch((err) => console.error(`${err} Sheesh`));
     },
   });
-
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
@@ -77,13 +87,25 @@ export default Login = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1 }}
-            >Signup</Typography>
-            <Button color="inherit">Login</Button>
-            <Button color="inherit">Sign Up</Button>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Signup
+            </Typography>
+            <Button
+              color="inherit"
+              onClick={() => {
+                history.push("/");
+              }}
+            >
+              Login
+            </Button>
+            <Button
+              color="inherit"
+              onClick={() => {
+                history.push("/sign up");
+              }}
+            >
+              Sign Up
+            </Button>
           </Toolbar>
         </AppBar>
       </Box>
@@ -113,7 +135,7 @@ export default Login = () => {
             sx={{ margin: "10px" }}
           />
           <Button color="primary" variant="contained" fullWidth type="submit">
-            Submit
+            Sign Up
           </Button>
         </form>
       </Box>
