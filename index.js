@@ -47,6 +47,33 @@ app.post("/api/v1/login", (req, res, next) => {
     });
   }
 });
+app.post("/api/v1/updateDetails", (req, res, next) => {
+  userModel.findOne({_id : req.body.userId}, (err, user) => {
+    console.log(user);
+    console.log(err);
+    if (err) {
+      res.status(500).json({
+        message : "Error writing data"
+      });
+      return;
+    }
+    user.email = req.body.email;
+    user.about = req.body.about;
+    user.firstName = req.body.firstName;
+    user.lastName = req.body.lastName;
+    user.save().then(()=>{
+      res.status(200).json({
+        message : "Record updated"
+      })
+      return;
+    }).catch(err => {
+      res.status(500).json({
+        message : "Error udpating data",
+        ...req.body
+      });
+    })
+  })
+})
 app.post("/api/v1/signup", (req, res, next) => {
   if (
     !req.body.firstName.trim() ||

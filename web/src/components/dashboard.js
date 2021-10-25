@@ -100,7 +100,7 @@ const Dashboard = () => {
         {posts.map((post) => {
           return (
             <Paper>
-              <div>{post.postDetail}</div>
+              <div key={post._id}>{post.postDetail}</div>
             </Paper>
           );
         })}
