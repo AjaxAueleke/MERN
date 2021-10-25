@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -8,18 +8,9 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-  useHistory,
-  useLocation,
-} from "react-router-dom";
-
+import { useHistory } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 const validationSchema = yup.object({
   email: yup
     .string("Enter your email")
@@ -27,12 +18,13 @@ const validationSchema = yup.object({
     .required("Email is required"),
   password: yup
     .string("Enter your password")
-    .min(8, "Password should be of minimum 8 characters length")
+    .min(6, "Password should be of minimum 6 characters length")
     .required("Password is required"),
 });
 let Login;
 export default Login = () => {
   const history = useHistory();
+  const [error, setError] = useState(false);
   useEffect(() => {
     if (localStorage.getItem("user")) {
       history.push("/dashboard");
@@ -40,43 +32,42 @@ export default Login = () => {
   });
   const formik = useFormik({
     initialValues: {
-      email: "foobar@example.com",
-      password: "foobar",
+      email: "",
+      password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       console.log(values);
+      setDis(true);
       axios
         .post(`http://localhost:5000/api/v1/login`, {
-          email: values.email,
+          email: values.email.trim(),
           password: values.password,
         })
         .then((res) => {
+          resetForm();
           if (res.status === 200) {
             localStorage.clear();
             localStorage.setItem("user", JSON.stringify(res.data));
             history.push("/dashboard");
           }
+          setDis(false);
           console.log(res);
         })
-        .catch((err) => console.error(`${err} Sheesh`));
+        .catch((err) => {
+          resetForm();
+          setDis(false);
+          setError(true)
+          console.log(err);
+        });
     },
   });
-
+  const [dis, setDis] = useState(false);
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Login Page
             </Typography>
@@ -99,36 +90,45 @@ export default Login = () => {
           </Toolbar>
         </AppBar>
       </Box>
-      <Box sx={{ margin: "50px auto" }}>
-        <form onSubmit={formik.handleSubmit}>
-          <TextField
-            fullWidth
-            id="email"
-            name="email"
-            label="Email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-            sx={{ margin: "10px" }}
-          />
-          <TextField
-            fullWidth
-            id="password"
-            name="password"
-            label="Password"
-            type="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-            sx={{ margin: "10px" }}
-          />
-          <Button color="primary" variant="contained" fullWidth type="submit">
-            Submit
-          </Button>
-        </form>
-      </Box>
+        {error && (
+          <Alert severity="error">Invalid email and/or password</Alert>
+        )}
+        <Box sx={{ margin: "50px auto" }}>
+          <form onSubmit={formik.handleSubmit}>
+            <TextField
+              fullWidth
+              id="email"
+              name="email"
+              label="Email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+              sx={{ margin: "10px" }}
+            />
+            <TextField
+              fullWidth
+              id="password"
+              name="password"
+              label="Password"
+              type="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+              sx={{ margin: "10px" }}
+            />
+            <Button
+              color="primary"
+              variant="contained"
+              fullWidth
+              type="submit"
+              disabled={dis}
+            >
+              Submit
+            </Button>
+          </form>
+        </Box>
     </div>
   );
 };
