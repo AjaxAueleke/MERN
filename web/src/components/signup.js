@@ -44,7 +44,7 @@ export default Login = () => {
     onSubmit: (values) => {
       console.log(values);
       axios
-        .post(`http://localhost:5000/api/v1/signup`, {
+        .post(`/api/v1/signup`, {
           firstName: values.firstname,
           lastName: values.lastname,
           email: values.email,

@@ -155,7 +155,7 @@ app.post("/api/v1/posts", (req, res, next) => {
       });
   }
 });
-// app.get("/**", (req, res) => res.redirect("/"));
+app.get("/**", (req, res) => res.redirect("/"));
 app.listen(PORT, () => {
   console.log("Listening on port " + PORT);
 });

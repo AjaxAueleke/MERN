@@ -40,7 +40,7 @@ export default Login = () => {
       console.log(values);
       setDis(true);
       axios
-        .post(`http://localhost:5000/api/v1/login`, {
+        .post(`/api/v1/login`, {
           email: values.email.trim(),
           password: values.password,
         })

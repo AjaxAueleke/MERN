@@ -28,7 +28,7 @@ const Dashboard = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:5000/api/v1/posts/${
+        `/api/v1/posts/${
           JSON.parse(localStorage.getItem("user"))._id
         }`
       )
@@ -68,7 +68,7 @@ const Dashboard = () => {
           onSubmit={(e) => {
             e.preventDefault();
             axios
-              .post("http://localhost:5000/api/v1/posts", {
+              .post("/api/v1/posts", {
                 postDetails: todo,
                 userId: JSON.parse(localStorage.getItem("user"))._id,
               })

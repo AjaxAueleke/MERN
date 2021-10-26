@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/index.css","webpack://src/App.css"],"names":[],"mappings":"AAAA,EACI,qBAAsB,CACtB,QAAU,CACV,SAAW,CCFX,oBDGJ","file":"main.fe0d05b0.chunk.css","sourcesContent":["* {\r\n    box-sizing: border-box;\r\n    margin : 0;\r\n    padding : 0;\r\n}","* {\r\n    font-family : 'Roboto'\r\n}"]}

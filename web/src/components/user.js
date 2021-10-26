@@ -123,7 +123,7 @@ const User = () => {
           </ListItem>
           <ListItem>
             <Button variant="contained" sx = {{fontStyle : 'bold'}} disabled={editing} onClick = {() => {
-              axios.post("http://localhost:5000/api/v1/updateDetails", {
+              axios.post("/api/v1/updateDetails", {
                 firstName : first,
                 lastName : last,
                 email : email,
